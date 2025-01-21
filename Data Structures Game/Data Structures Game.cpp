@@ -6,4 +6,5 @@
 int main()
 {
     std::cout << "Test change here.\n";
+    std::cout <<"\n" << "Second test line here.\n";
 }
