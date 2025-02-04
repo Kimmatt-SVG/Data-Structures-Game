@@ -1,73 +1,9 @@
 ﻿#include <iostream>
 #include <vector>
+#include "Inventory.h"
+#include "Attack.h"
+
 using namespace std;
-
-class inventory {
-private:
-	string item;
-	string description;
-	int amt;
-	bool unique;
-	string type;
-	int place;
-public:
-	inventory(string varPlace, string varDesc, int amount, bool cool, string whatItIs, int location) : item(varPlace), description(varDesc), amt(amount), unique(cool), type(whatItIs), place(location) {}
-
-	int getPlace() const {
-		return place;
-	}
-
-	string getItem() const {
-		return item;
-	}
-
-	string getDescription() const {
-		return description;
-	}
-	string typeOfThing() const {
-		return type;
-	}
-
-
-	int getAmount() const {
-		return amt;
-	}
-	bool isUnique() const {
-		return unique;
-	}
-	void display() const {
-		cout << "Item no. " << place << "\n" << endl;
-		cout << "Item: " << item << "\n"
-			<< "Description: " << description << "\n"
-			<< "Amount: " << amt << "\n"
-			<< "Unique: " << (unique ? "Yes" : "No") << "\n"
-			<< "Type: " << type << "\n";
-	}
-
-};
-
-class attack {
-public:
-	string attackName;
-	int damage;
-	int accuracy;
-	string message;
-public:
-	attack(string attNa, int hurt, int hit, string talk) : attackName(attNa), damage(hurt), accuracy(hit), message(talk) {}
-
-	string getName() const {
-		return attackName;
-	}
-	int getDamage() const {
-		return damage;
-	}
-	int getAccuracy() const {
-		return accuracy;
-	}
-	string getMessage() const {
-		return message;
-	}
-};
 
 class character {
 public:
