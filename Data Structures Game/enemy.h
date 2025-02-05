@@ -1,16 +1,44 @@
 #ifndef ENEMY_H
 #define ENEMY_H
-#include "Character.h"
+#include <string>
 
-class enemy : public character {
+class enemy {
 public:
+	//members
+	int health;
 	int strength;
-	int mana;
-	int exp;
+	std::string name;
+	
 public:
-	enemy(int cappedHealth, int battleHealth, int challenge, int fast, int str, int magicMana, int expLeft);
+	//constructors
+	enemy(int battleHealth, int str, std::string Nname);
+	//getters
+	int getHealth();
 	int getStrength();
-	int getMana();
-	int getExp();
+	std::string getName();
+	//setters
+	void setHealth(int newHealth);
+
+	//methods]
+	int randomAtkValue();
+};
+
+class goblin : public enemy {
+
+public:
+	//members
+	
+public:
+	//constructors
+	goblin(int battleHealth, int str, std::string Nname);
+	//getters
+
+	//setters
+
+	//methods
+
+
+
+
 };
 #endif
