@@ -70,7 +70,7 @@ void handleMenuChoice(int choice) {
 		break;
 	}
 }
-// King was here
+
 int main(){
 	//overarching game loop
 	int choice;
@@ -86,6 +86,8 @@ int main(){
 		}
 	}
 }
+
+//king was here
 
 
 
