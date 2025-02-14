@@ -71,8 +71,6 @@ void handleMenuChoice(int choice) {
 	}
 }
 
-
-//Jack Test Comment
 int main(){
 	//overarching game loop
 	int choice;
@@ -89,7 +87,6 @@ int main(){
 	}
 }
 
-//king was here
 
 
 

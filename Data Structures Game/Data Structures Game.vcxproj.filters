@@ -24,43 +24,25 @@
     <ClCompile Include="Data Structures Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Inventory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Attack.h">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Attack.cpp">
+    <ClCompile Include="item.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="user.cpp">
       <Filter>Source Files\CppCharacters</Filter>
     </ClCompile>
-    <ClCompile Include="goblin.cpp">
-      <Filter>Source Files\CppCharacters</Filter>
-    </ClCompile>
     <ClCompile Include="enemy.cpp">
-      <Filter>Source Files\CppCharacters</Filter>
-    </ClCompile>
-    <ClCompile Include="Character.cpp">
       <Filter>Source Files\CppCharacters</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Inventory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Character.h">
-      <Filter>Header Files\HeaderCharacters</Filter>
-    </ClInclude>
     <ClInclude Include="enemy.h">
-      <Filter>Header Files\HeaderCharacters</Filter>
-    </ClInclude>
-    <ClInclude Include="goblin.h">
       <Filter>Header Files\HeaderCharacters</Filter>
     </ClInclude>
     <ClInclude Include="user.h">
       <Filter>Header Files\HeaderCharacters</Filter>
+    </ClInclude>
+    <ClInclude Include="item.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
