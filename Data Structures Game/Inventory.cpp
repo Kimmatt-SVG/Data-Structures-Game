@@ -4,6 +4,12 @@
 
 //MISC CODE FOR LATER
 
+//class inventory
+
+
+
+
+
 /*
 void defaultInventory(vector<inventory>& items) {
 	// A vector to store the items
