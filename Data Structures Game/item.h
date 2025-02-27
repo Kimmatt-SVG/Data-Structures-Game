@@ -25,3 +25,15 @@ public:
 	int getDamage() const;
 	int getAccuracy() const;
 };
+
+class healing : public items {
+private:
+	int heal;
+	int manaUsage;
+public:
+	healing(string item, std::string description, std::string classification, int h, int mana);
+	int getHeal() const;
+	int getManaCost() const;
+	void display() const;
+
+};
