@@ -129,11 +129,13 @@
   <ItemGroup>
     <ClCompile Include="Data Structures Game.cpp" />
     <ClCompile Include="enemy.cpp" />
+    <ClCompile Include="inventory.cpp" />
     <ClCompile Include="item.cpp" />
     <ClCompile Include="user.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="enemy.h" />
+    <ClInclude Include="inventory.h" />
     <ClInclude Include="item.h" />
     <ClInclude Include="user.h" />
   </ItemGroup>
