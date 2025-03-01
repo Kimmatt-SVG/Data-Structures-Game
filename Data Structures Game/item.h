@@ -9,7 +9,9 @@ private:
 //	int amount;
 	std::string type;
 	
+	
 public: 
+	int cost;
 	items(std::string itemName, std::string desc, std::string classification);
 	std::string getItem() const;
 	std::string getDescription() const;
