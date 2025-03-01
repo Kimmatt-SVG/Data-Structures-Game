@@ -11,6 +11,7 @@ user player(100, 30, 5, "Test Dummy");
 goblin goba(100, 11, "goba1");
 //Creates inventory
 DLL inventory;
+
 //methods
 
 void displayMenu() {
@@ -74,13 +75,13 @@ void handleMenuChoice(int choice) {
 int main(){
 
 	//creates various wepons and items and inputs them into test inventory
-	inventory.pushBack(new weapons("Sword", "A sharp blade", "Melee Weapon", 50, 80));
-	inventory.pushBack(new weapons("Bow", "A long-range bow", "Ranged Weapon", 30, 90));
-	inventory.pushBack(new healing("Health Potion", "Restores HP", "Consumable", 50, 0));
-	inventory.pushBack(new healing("Mana Potion", "Restores Mana", "Consumable", 0, 50));
-	inventory.pushBack(new items("Shield", "Blocks attacks", "Armor"));
-	inventory.pushBack(new items("Torch", "Provides light", "Utility"));
-
+	inventory.pushBack(new weapons("Sword", "A sharp blade", "Melee Weapon", 2, 1, 50, 80));
+	inventory.pushBack(new weapons("Bow", "A long-range bow", "Ranged Weapon", 2, 1, 30, 90));
+	inventory.pushBack(new healing("Health Potion", "Restores HP", "Consumable", 5, 3, 50, 0));
+	inventory.pushBack(new healing("Mana Potion", "Restores Mana", "Consumable", 3, 1, 0, 50));
+	inventory.pushBack(new items("Shield", "Blocks attacks", "Armor" , 4, 2));
+	inventory.pushBack(new items("Torch", "Provides light", "Utility", 0, -1));
+	inventory.pushBack(new currency("Gold Coins", "Can buy things using it", "Currency", 1, 1, 64));
 	//overarching game loop
 	int choice;
 	while (true) {
