@@ -50,4 +50,11 @@ private:
 public:
     currency(const std::string& item, const std::string& description, const std::string& classification, int costAmnt, int sellValue, int amnt);
     int getMoney() const;
+    void deduct(int n) {
+        amount -= n;
+        if (amount < 0) amount = 0;
+    }
+    void deposit(int n) {
+        amount += n;
+    }
 };
