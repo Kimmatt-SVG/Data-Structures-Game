@@ -24,7 +24,7 @@ void displayMenu() {
 }
 
 void returnToOverworld() {
-    std::cout << "You returning to da overworld...\n";
+    system("cls");
 }
 
 void enterShop() {
@@ -52,7 +52,7 @@ void handleMenuChoice(int choice) {
         break;
     case 3:
         // Just displays the inventory
-        inventory.displayList();
+        inventory.manaageInventory();
         break;
     case 4:
         enterShop();
