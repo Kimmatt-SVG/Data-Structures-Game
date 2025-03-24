@@ -138,6 +138,7 @@
   <ItemGroup>
     <ClInclude Include="dialogueNode.h" />
     <ClInclude Include="enemy.h" />
+    <ClInclude Include="globals.h" />
     <ClInclude Include="inventory.h" />
     <ClInclude Include="item.h" />
     <ClInclude Include="talkingNPC.h" />

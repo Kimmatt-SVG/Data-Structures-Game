@@ -4,43 +4,44 @@
 class items {
 private:
     std::string item;
-    std::string description;
     std::string type;
     int cost;
-    int sell;
 
 public:
-    items(const std::string& itemName, const std::string& desc, const std::string& classification, int costAmnt, int sellValue);
+    items(const std::string& itemName, const std::string& classification, int costAmnt);
     virtual ~items() = default; // Virtual destructor for proper cleanup in derived classes
 
     std::string getItem() const;
-    std::string getDescription() const;
     std::string getType() const;
     int getCost() const;
-    int getSellValue() const;
 };
 
 class weapons : public items {
 private:
     int damage;
-    int accuracy;
 
 public:
-    weapons(const std::string& item, const std::string& description, const std::string& classification, int costAmnt, int sellValue, int dam, int acc);
+    weapons(const std::string& item, const std::string& classification, int costAmnt, int dam);
     int getDamage() const;
-    int getAccuracy() const;
 };
 
-class healing : public items {
+class Potions : public items {
 private:
-    int heal;
-    int manaUsage;
+    int ammount;
 
 public:
-    healing(const std::string& item, const std::string& description, const std::string& classification, int costAmnt, int sellValue, int h, int mana);
-    int getHeal() const;
-    int getManaCost() const;
-    void display() const;
+    Potions(const std::string& item, const std::string& classification, int costAmnt, int ammount);
+    int getAmmount();
+    void use();
+};
+
+class HealingPotion : public Potions {
+private:
+    int healingAmmount;
+
+public:
+    HealingPotion(const std::string& item, const std::string& classification, int costAmnt, int ammount, int healingAmmount);
+    int getHealingAmmount();
 };
 
 class currency : public items {
@@ -48,6 +49,6 @@ private:
     int amount;
 
 public:
-    currency(const std::string& item, const std::string& description, const std::string& classification, int costAmnt, int sellValue, int amnt);
+    currency(const std::string& item, const std::string& classification, int costAmnt, int amnt);
     int getMoney() const;
 };
