@@ -133,88 +133,101 @@ items* node::getItem() {
     }
 
     void DLL::manaageInventory() {
-
-        //a counter number to lable how many items there are in the inventory
         int couter = 1;
-
-        //clears the CLI
         system("cls");
 
-        //temp variables to hold user response
         int response;
         int response2;
 
-        //displayes whole inventory
         node* temp = head;
         std::cout << "This is your inventory: " << std::endl;
         while (temp) {
-            temp->data->getItem();
-            std::cout << couter << ". " << temp->data->getItem() << std::endl;
+            std::string itemName = temp->data->getItem();
+
+            HealingPotion* potion = dynamic_cast<HealingPotion*>(temp->data);
+            if (potion) {
+                std::cout << couter << ". " << itemName << " (x" << potion->getAmmount() << ")" << std::endl;
+            }
+            else {
+                std::cout << couter << ". " << itemName << std::endl;
+            }
+
             temp = temp->nextNode;
             couter++;
         }
 
-        //displays choices for managing inventory 
         std::cout << "Press 1 to manage inventory or 0 to quit" << std::endl;
         std::cin >> response;
 
-        //catches a miss responce
         if (response != 1 && response != 0) {
             std::cout << "This is an invalid choice";
             manaageInventory();
         }
-        //manages inventory
         else if (response == 1) {
             std::cout << "Enter the item number you would like to remove (press 0 to exit): " << std::endl;
-
             std::cin >> response2;
             system("cls");
 
-                //checks for exit response
-            if (response2 == 0) {
-                return;
-            }
+            if (response2 == 0) return;
 
-            //checks if the number is a valid number
             if (response2 < 1 || response2 >= couter) {
                 manaageInventory();
                 return;
             }
 
-            //finds the node that the user inputed 
             node* target = head;
             int count = 1;
             while (target != nullptr && count < response2) {
                 target = target->nextNode;
                 count++;
-             }
+            }
 
-             //if the node does not exist
-             if (target == nullptr) {
-                  return;
-             }
+            if (target == nullptr) return;
 
-             //removes the node from the list
-             if (target == head) {
-                //if the target is the first node
-                DLL::popFront();
-             }
-             else if (target == DLL::getLast()) {
-                 //if target is the last node
-                 DLL::popBack();
-             }
-             else {
-                // Otherwise, unlink the node from the list and delete it
+            if (target == head) {
+                popFront();
+            }
+            else if (target == getLast()) {
+                popBack();
+            }
+            else {
                 target->prevNode->nextNode = target->nextNode;
                 target->nextNode->prevNode = target->prevNode;
                 delete target;
-             }
+            }
 
-             std::cout << "Item removed successfully." << std::endl;
+            std::cout << "Item removed successfully." << std::endl;
         }
-        //exits
         else if (response == 0) {
             system("cls");
             return;
         }
+    }
+
+
+    void DLL::removeNode(node* target) {
+        if (!target) return;
+
+        // If the target is the head node, use popFront.
+        if (target == head) {
+            popFront();
+            return;
+        }
+
+        // If the target is the last node, use popBack.
+        if (target == getLast()) {
+            popBack();
+            return;
+        }
+
+        // Otherwise, unlink the node and delete it.
+        node* prev = target->prevNode;
+        node* next = target->nextNode;
+        if (prev) {
+            prev->nextNode = next;
+        }
+        if (next) {
+            next->prevNode = prev;
+        }
+        delete target;
     }

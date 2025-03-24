@@ -1,6 +1,9 @@
 #include "user.h"
 #include <random>
 #include <thread>
+#include "inventory.h"
+#include "item.h"
+#include "globals.h"
 
 user::user(int battleHealth, int str, int magicMana, std::string userName) {
 	health = battleHealth;
@@ -79,9 +82,10 @@ void user::battle(enemy& enemy) { //!FIXME - MIGHT NEED TO MOVE THE HEALTH CHECK
 		std::cout << "========================\n";
 		std::cout << std::endl;
 		std::cout << "HP: " << health << std::endl;
+		std::cout << "MP: " << mana << std::endl;
 		std::cout << "1. Attack" << std::endl;
 		std::cout << "2. ...." << std::endl;
-		std::cout << "3. ...." << std::endl;
+		std::cout << "3. Use Health Potion" << std::endl;
 		std::cout << "4. ...." << std::endl;
 		std::cout << "You choose: ";
 		std::cin >> playerChoice;
@@ -100,6 +104,44 @@ void user::battle(enemy& enemy) { //!FIXME - MIGHT NEED TO MOVE THE HEALTH CHECK
 			std::this_thread::sleep_for(std::chrono::seconds(2)); // Pause for 2 seconds
 			std::cout << "You did " << tempPlayerDamage << " Damage!" << std::endl << std::endl;
 			std::this_thread::sleep_for(std::chrono::seconds(2)); // Pause for 2 seconds
+		}
+
+		// Implementing potion usage
+		if (playerChoice == 3) {
+			// Search the inventory for a health potion
+			node* current = inventory.getFirst();
+			bool potionFound = false;
+			while (current != nullptr) {
+				//using dyanic cast
+				HealingPotion* potion = dynamic_cast<HealingPotion*>(current->data);
+				if (potion && potion->getItem() == "Health Potion") {
+					// checks if there is a potions
+					if (potion->getAmmount() > 0) {
+						//applies healing
+						health += potion->getHealingAmmount();
+						potion->use();
+						std::cout << "You used a Health Potion and healed " << potion->getHealingAmmount() << " HP! " << potion->getAmmount() << " Potions remaining \n\n";
+						// if potion is empty it removes it from inventory
+						if (potion->getAmmount() <= 0) {
+							inventory.removeNode(current);
+							std::cout << "You used up the last Health Potion.\n";
+						}
+						potionFound = true;
+					}
+					else {
+						// No uses left (should probably not happen if removed earlier)
+						std::cout << "This potion is empty.\n";
+					}
+					break;
+				}
+				current = current->nextNode;
+			}
+
+			if (!potionFound) {
+				std::cout << "You have no Health Potions left!\n";
+			}
+
+			std::this_thread::sleep_for(std::chrono::seconds(2));
 		}
 
 		//enemys turn

@@ -5,8 +5,9 @@
 #include "inventory.h"
 #include "item.h"
 #include "talkingNPC.h" 
+#include "globals.h"
 
-user player(100, 30, 5, "Test Dummy");
+user player(100, 30, 20, "Test Dummy");
 goblin goba(100, 11, "goba1");
 DLL inventory;
 
@@ -70,13 +71,13 @@ void handleMenuChoice(int choice) {
 }
 
 int main() {
-    inventory.pushBack(new weapons("Sword", "A sharp blade", "Melee Weapon", 2, 1, 50, 80));
-    inventory.pushBack(new weapons("Bow", "A long-range bow", "Ranged Weapon", 2, 1, 30, 90));
-    inventory.pushBack(new healing("Health Potion", "Restores HP", "Consumable", 5, 3, 50, 0));
-    inventory.pushBack(new healing("Mana Potion", "Restores Mana", "Consumable", 3, 1, 0, 50));
-    inventory.pushBack(new items("Shield", "Blocks attacks", "Armor", 4, 2));
-    inventory.pushBack(new items("Torch", "Provides light", "Utility", 0, -1));
-    inventory.pushBack(new currency("Gold Coins", "Can buy things using it", "Currency", 1, 1, 64));
+    inventory.pushBack(new weapons("Sword", "Melee Weapon", 50, 80));
+    inventory.pushBack(new weapons("Bow", "Ranged Weapon", 30, 90));
+    inventory.pushBack(new HealingPotion("Health Potion", "Consumable", 5, 2, 10));
+    //inventory.pushBack(new healing("Mana Potion", "Consumable", 3, 1, 0, 50));
+    //inventory.pushBack(new items("Shield", "Armor", 4, 2));
+    //inventory.pushBack(new items("Torch", "Utility", 0, -1));
+    //inventory.pushBack(new currency("Gold Coins", "Currency", 1));
     int choice;
     while (true) {
         displayMenu();

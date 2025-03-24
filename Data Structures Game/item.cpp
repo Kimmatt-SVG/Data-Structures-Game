@@ -5,15 +5,11 @@
 
 
 // items class implementation
-items::items(const std::string& itemName, const std::string& desc, const std::string& classification, int costAmnt, int sellValue)
-    : item(itemName), description(desc), type(classification), cost(costAmnt), sell(sellValue) {}
+items::items(const std::string& itemName, const std::string& classification, int costAmnt)
+    : item(itemName), type(classification), cost(costAmnt) {}
 
 std::string items::getItem() const {
     return item;
-}
-
-std::string items::getDescription() const {
-    return description;
 }
 
 std::string items::getType() const {
@@ -24,41 +20,39 @@ int items::getCost() const {
     return cost;
 }
 
-int items::getSellValue() const {
-    return sell;
-}
-
 // weapons class implementation
-weapons::weapons(const std::string& item, const std::string& description, const std::string& classification, int costAmnt, int sellValue, int dam, int acc)
-    : items(item, description, classification, costAmnt, sellValue), damage(dam), accuracy(acc) {}
+weapons::weapons(const std::string& item, const std::string& classification, int costAmnt, int dam)
+    : items(item, classification, costAmnt), damage(dam) {}
 
 int weapons::getDamage() const {
     return damage;
 }
 
-int weapons::getAccuracy() const {
-    return accuracy;
+// Potions class implementation
+Potions::Potions(const std::string& item, const std::string& classification, int costAmnt, int ammount) 
+    : items(item, classification, costAmnt), ammount(ammount) {} 
+
+
+int Potions::getAmmount() {
+    return ammount;
+}
+void Potions::use() {
+    ammount = ammount - 1;
 }
 
-// healing class implementation
-healing::healing(const std::string& item, const std::string& description, const std::string& classification, int costAmnt, int sellValue, int h, int mana)
-    : items(item, description, classification, costAmnt, sellValue), heal(h), manaUsage(mana) {}
-
-int healing::getHeal() const {
-    return heal;
+//healling potion class
+HealingPotion::HealingPotion(const std::string& item, const std::string& classification, int costAmnt, int ammount, int healingAmmount)
+    : Potions(item, classification, costAmnt, ammount), healingAmmount(healingAmmount) {
 }
 
-int healing::getManaCost() const {
-    return manaUsage;
+int HealingPotion::getHealingAmmount() {
+    return healingAmmount;
 }
 
-void healing::display() const {
-    // Implementation for display
-}
 
 // currency class implementation
-currency::currency(const std::string& item, const std::string& description, const std::string& classification, int costAmnt, int sellValue, int amnt)
-    : items(item, description, classification, costAmnt, sellValue), amount(amnt) {}
+currency::currency(const std::string& item, const std::string& classification, int costAmnt, int amnt)
+    : items(item, classification, costAmnt), amount(amnt) {}
 
 int currency::getMoney() const {
     return amount;
