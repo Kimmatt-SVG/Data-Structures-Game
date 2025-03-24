@@ -84,9 +84,9 @@ void user::battle(enemy& enemy) { //!FIXME - MIGHT NEED TO MOVE THE HEALTH CHECK
 		std::cout << "HP: " << health << std::endl;
 		std::cout << "MP: " << mana << std::endl;
 		std::cout << "1. Attack" << std::endl;
-		std::cout << "2. ...." << std::endl;
+		std::cout << "2. Use Mana Potion (does not work rn)" << std::endl;
 		std::cout << "3. Use Health Potion" << std::endl;
-		std::cout << "4. ...." << std::endl;
+		std::cout << "4. Run Away" << std::endl;
 		std::cout << "You choose: ";
 		std::cin >> playerChoice;
 		std::cout << std::endl;
@@ -142,6 +142,13 @@ void user::battle(enemy& enemy) { //!FIXME - MIGHT NEED TO MOVE THE HEALTH CHECK
 			}
 
 			std::this_thread::sleep_for(std::chrono::seconds(2));
+		}
+
+		if (playerChoice == 4) {
+			std::cout << "You flee away to fight another day...";
+			std::this_thread::sleep_for(std::chrono::seconds(2)); // Pause for 2 seconds
+			system("cls");
+			break;
 		}
 
 		//enemys turn
