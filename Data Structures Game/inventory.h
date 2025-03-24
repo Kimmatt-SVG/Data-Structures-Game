@@ -32,7 +32,7 @@ public:
     void popBack();
     void popFront();
     ~DLL();
-    void displayList() const;
+    void manaageInventory();
 };
 
 
