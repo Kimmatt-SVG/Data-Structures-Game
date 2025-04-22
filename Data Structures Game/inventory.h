@@ -32,6 +32,7 @@ public:
     void popBack();
     void popFront();
     ~DLL();
+	void displayInvnetory();
     void manaageInventory();
     void removeNode(node* target);
 };

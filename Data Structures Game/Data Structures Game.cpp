@@ -6,10 +6,12 @@
 #include "item.h"
 #include "talkingNPC.h" 
 #include "globals.h"
+#include "shop.cpp"
 
 user player(100, 30, 20, "Test Dummy");
 goblin goba(100, 11, "goba1");
 DLL inventory;
+shop TestShop(player, inventory);
 
 // Methods
 void displayMenu() {
@@ -56,7 +58,7 @@ void handleMenuChoice(int choice) {
         inventory.manaageInventory();
         break;
     case 4:
-        enterShop();
+		TestShop.playShop();
         break;
     case 5:
         chat();
@@ -71,13 +73,9 @@ void handleMenuChoice(int choice) {
 }
 
 int main() {
-    inventory.pushBack(new weapons("Sword", "Melee Weapon", 50, 80));
-    inventory.pushBack(new weapons("Bow", "Ranged Weapon", 30, 90));
+    inventory.pushBack(new weapons("Sword", "Starting Weapon", 50, 80));
+    inventory.pushBack(new weapons("Bow", "Ranged Starting Weapon", 30, 90));
     inventory.pushBack(new HealingPotion("Health Potion", "Consumable", 5, 2, 10));
-    //inventory.pushBack(new healing("Mana Potion", "Consumable", 3, 1, 0, 50));
-    //inventory.pushBack(new items("Shield", "Armor", 4, 2));
-    //inventory.pushBack(new items("Torch", "Utility", 0, -1));
-    //inventory.pushBack(new currency("Gold Coins", "Currency", 1));
     int choice;
     while (true) {
         displayMenu();
