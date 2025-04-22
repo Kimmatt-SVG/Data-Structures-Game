@@ -9,6 +9,7 @@ public:
 	int health;
 	int strength;
 	int mana;
+	int gold;
 	std::string name;
 public:
 	//constructors
@@ -17,10 +18,12 @@ public:
 	int getHealth();
 	int getStrength();
 	int getMana();
+	int getGold();
 	std::string getName();
 	//setters
 	void setHealth(int newHealth);
 	void setStrength(int newStrength);
+	void setGold(int newGold);
 	void setName(std::string newName);
 	//methods
 	int randomAtkValue();
