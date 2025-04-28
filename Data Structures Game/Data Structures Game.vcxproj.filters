@@ -42,6 +42,9 @@
     <ClCompile Include="talkingNPC.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="enemy.h">
@@ -65,6 +68,7 @@
     <ClInclude Include="globals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Map.h">
     <ClInclude Include="shop.h">
       <Filter>Header Files</Filter>
     </ClInclude>
