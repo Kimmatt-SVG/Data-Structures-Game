@@ -4,9 +4,9 @@
 #include <ctime>
 #include "user.h"
 #include "enemy.h"
+#include "talkingNPC.h"
 #include "inventory.h"
 #include "item.h"
-#include "talkingNPC.h"
 #include "globals.h"
 #include "map.h"
 
