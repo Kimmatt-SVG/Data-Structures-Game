@@ -4,9 +4,9 @@
 #include <ctime>
 #include "user.h"
 #include "enemy.h"
+#include "talkingNPC.h"
 #include "inventory.h"
 #include "item.h"
-#include "talkingNPC.h"
 #include "globals.h"
 #include "map.h"
 
@@ -29,61 +29,32 @@ void displayMenu() {
 
 void explore() {
     GameMap gameMap(5, 5);
-    gameMap.addNode(6, "Ancient Forest - The trees here are unnaturally tall.");
-    gameMap.addNode(18, "Dangerous Swamp - Thick fog obscures your vision.");
-    gameMap.setImpassable(12);
-    gameMap.setImpassable(13);
-    gameMap.addNode(8, "Village Square - A friendly merchant waves at you from his stall.");
+    gameMap.addNode(6, "Ancient Forest - The trees here are unnaturally tall.", true, 30);
+    gameMap.addNode(18, "Dangerous Swamp - Thick fog obscures your vision.", true, 40);
+    gameMap.addNode(8, "Village Square - A friendly merchant waves at you.", true, 5);
 
     while (true) {
-        system("cls");
         system("cls");
         gameMap.displayCurrentLocation();
         gameMap.displayMap();
         std::cout << "\n=== Exploration Options ===\n";
-        std::cout << "W - Move North\n";
-        std::cout << "S - Move South\n";
-        std::cout << "A - Move West\n";
-        std::cout << "D - Move East\n";
-        std::cout << "M - Open Menu\n";
-        std::cout << "I - Open Inventory\n";
-        std::cout << "==========================\n";
-        std::cout << "Choose an action: ";
+        std::cout << "W - Move North\nS - Move South\nA - Move West\nD - Move East\n";
+        std::cout << "M - Open Menu\nI - Open Inventory\n";
+        std::cout << "==========================\nChoose an action: ";
 
         char input;
         std::cin >> input;
         input = toupper(input);
 
         switch (input) {
-        case 'W':
-            if (!gameMap.move('W')) {
+        case 'W': case 'S': case 'A': case 'D':
+            if (!gameMap.move(input)) {
                 std::cout << "\nYou cannot go that way!\n";
                 system("pause");
             }
             break;
-        case 'S':
-            if (!gameMap.move('S')) {
-                std::cout << "\nYou cannot go that way!\n";
-                system("pause");
-            }
-            break;
-        case 'A':
-            if (!gameMap.move('A')) {
-                std::cout << "\nYou cannot go that way!\n";
-                system("pause");
-            }
-            break;
-        case 'D':
-            if (!gameMap.move('D')) {
-                std::cout << "\nYou cannot go that way!\n";
-                system("pause");
-            }
-            break;
-        case 'M':
-            return;
-        case 'I':
-            inventory.manaageInventory();
-            break;
+        case 'M': return;
+        case 'I': inventory.manaageInventory(); break;
         default:
             std::cout << "\nInvalid input!\n";
             system("pause");
@@ -91,6 +62,13 @@ void explore() {
         }
 
         MapNode* current = gameMap.getCurrentLocation();
+        int chance = rand() % 100;
+        if (chance < current->encounterRate) {
+            std::cout << "\nA goblin ambushes you!\n";
+            player.battle(goba);
+            system("pause");
+        }
+
         if (current->id == 8) {
             roadsideBeggar merchant;
             merchant.printDialogue(1);
@@ -105,6 +83,7 @@ void explore() {
         }
     }
 }
+
 
 void returnToOverworld() {
     system("cls");

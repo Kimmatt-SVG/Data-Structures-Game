@@ -10,6 +10,7 @@ public:
     int id;
     std::string description;
     bool isPassable;
+    int encounterRate; // 0-100, percent chance of encounter
 
     // Pointers to adjacent nodes
     MapNode* up;
@@ -17,8 +18,8 @@ public:
     MapNode* left;
     MapNode* right;
 
-    MapNode(int id, const std::string& desc, bool passable = true)
-        : id(id), description(desc), isPassable(passable),
+    MapNode(int id, const std::string& desc, bool passable = true, int rate = 10)
+        : id(id), description(desc), isPassable(passable), encounterRate(rate),
         up(nullptr), down(nullptr), left(nullptr), right(nullptr) {}
 };
 
@@ -30,27 +31,22 @@ private:
     int height;
     void getPlayerPosition(int& x, int& y) const;
 
-
 public:
     GameMap(int width, int height);
     ~GameMap();
     void displayMap() const;
 
-    // Map construction
-    void addNode(int id, const std::string& description, bool passable = true);
+    void addNode(int id, const std::string& description, bool passable = true, int encounterRate = 10);
     void connectNodes(int fromId, int toId, char direction);
     void setImpassable(int id);
 
-    // Navigation
     bool move(char direction);
     MapNode* getCurrentLocation() const;
     void displayCurrentLocation() const;
-
-    // Map validation
     bool isValidPosition(int x, int y) const;
 
 private:
     void clearMap();
 };
 
-#endif // MAP_H#pragma once
+#endif 
