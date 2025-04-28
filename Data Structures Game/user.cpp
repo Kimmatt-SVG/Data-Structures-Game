@@ -10,6 +10,7 @@ user::user(int battleHealth, int str, int magicMana, std::string userName) {
 	strength = str;
 	mana = magicMana;
 	name = userName;
+	gold = 10000;
 }
 
 //getters
@@ -22,6 +23,9 @@ int user::getStrength() {
 int user::getMana() {
 	return mana;
 }
+int user::getGold() {
+	return gold;
+}
 std::string user::getName() {
 	return name;
 }
@@ -32,6 +36,9 @@ void user::setHealth(int newHealth) {
 }
 void user::setStrength(int newStrength) {
 	strength = newStrength;
+}
+void user::setGold(int newGold) {
+	gold = newGold;
 }
 void user::setName(std::string newName) {
 	name = newName;

@@ -143,6 +143,7 @@
     <ClInclude Include="inventory.h" />
     <ClInclude Include="item.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="shop.h" />
     <ClInclude Include="talkingNPC.h" />
     <ClInclude Include="user.h" />
   </ItemGroup>
