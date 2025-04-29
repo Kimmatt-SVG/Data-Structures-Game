@@ -30,6 +30,20 @@ items* node::getItem() {
     }
 
     void DLL::pushBack(items* newItem) {
+        // Check if the list already has 8 items
+        int count = 0;
+        node* temp = head;
+        while (temp) {
+            count++;
+            temp = temp->nextNode;
+        }
+
+        if (count >= 4) {
+            std::cout << "Inventory is full. Cannot add more items." << std::endl;
+            return;
+        }
+
+        // Add the new item to the list
         node* newNode = new node(newItem);
         if (!head) {
             head = newNode;
@@ -40,7 +54,6 @@ items* node::getItem() {
             newNode->prevNode = final;
         }
         index = head;
-
     }
 
     void DLL::insertAfter(node* prev, node* newNode) {
@@ -130,6 +143,19 @@ items* node::getItem() {
 
     DLL::~DLL() {
         while (head) popFront(); // Clean up memory
+    }
+
+    void DLL::displayInvnetory() {
+        node* temp = head;
+        int counter = 1; // Initialize a counter for numbering items
+        std::cout << std::endl << "This is your inventory: " << std::endl;
+        while (temp) {
+            std::string itemName = temp->data->getItem();
+            std::cout << counter << ". " << itemName << std::endl; // Display the item with its number
+            temp = temp->nextNode;
+            counter++; // Increment the counter
+        }
+        std::cout << std::endl;
     }
 
     void DLL::manaageInventory() {

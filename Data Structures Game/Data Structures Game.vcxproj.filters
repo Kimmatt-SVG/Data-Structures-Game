@@ -69,6 +69,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Map.h">
+    <ClInclude Include="shop.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

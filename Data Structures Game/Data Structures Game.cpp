@@ -9,10 +9,12 @@
 #include "item.h"
 #include "globals.h"
 #include "map.h"
+#include "shop.cpp"
 
 user player(100, 30, 20, "Test Dummy");
 goblin goba(100, 11, "goba1");
 DLL inventory;
+shop TestShop(player, inventory);
 
 void displayMenu() {
     std::cout << "========== Game Menu ==========\n";
@@ -114,7 +116,7 @@ void handleMenuChoice(int choice) {
         inventory.manaageInventory();
         break;
     case 4:
-        enterShop();
+		TestShop.playShop();
         break;
     case 5:
         chat();
@@ -136,7 +138,9 @@ int main() {
     inventory.pushBack(new weapons("Sword", "Melee Weapon", 50, 80));
     inventory.pushBack(new weapons("Bow", "Ranged Weapon", 30, 90));
     inventory.pushBack(new HealingPotion("Health Potion", "Consumable", 5, 2, 10));
-
+    inventory.pushBack(new weapons("Sword", "Starting Weapon", 50, 80));
+    inventory.pushBack(new weapons("Bow", "Ranged Starting Weapon", 30, 90));
+    inventory.pushBack(new HealingPotion("Health Potion", "Consumable", 5, 2, 10));
     int choice;
     while (true) {
         displayMenu();
