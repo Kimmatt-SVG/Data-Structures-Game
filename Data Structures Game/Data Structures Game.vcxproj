@@ -147,6 +147,14 @@
     <ClInclude Include="talkingNPC.h" />
     <ClInclude Include="user.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="Attack.wav" />
+    <Media Include="Battle.wav" />
+    <Media Include="enemy_attack.wav" />
+    <Media Include="health_potion.wav" />
+    <Media Include="run_away.mp3" />
+    <Media Include="switch_weapon.wav" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

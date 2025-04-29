@@ -11,10 +11,84 @@
 #include "map.h"
 #include "shop.cpp"
 
+//CREATE GAME OBJECTS HERE
+
+DLL inventory;
 user player(100, 30, 20, "Test Dummy");
 goblin goba(100, 11, "goba1");
-DLL inventory;
 shop TestShop(player, inventory);
+
+// Define items for the Mythic Shop
+std::vector<items*> mythicItems = {
+    new weapons("Excalibur", "The legendary sword of King Arthur", 500, 150),
+    new weapons("Mjolnir", "The mighty hammer of Thor", 800, 200),
+    new HealingPotion("Elixir of Life", "A potion that fully restores health", 300, 1, 100),
+    new items("Phoenix Feather", "A rare item with mystical properties", 1000)
+};
+
+// Create the Mythic Shop
+shop mythicShop("Mythic Shop", mythicItems, player, inventory);
+
+void startGame() {
+    int c = 0;
+    std::string name;
+     
+    std::cout << "Select your character:\n";
+    std::cout << "1. Knight\n";
+    std::cout << "Stats: 100 HP, 30 Strength, 20 Mana\n";
+    std::cout << "2. Ranger\n";
+    std::cout << "Stats: 80 HP, 20 Strength, 40 Mana\n";
+    std::cout << "3. Gladiator\n";
+    std::cout << "Stats: 120 HP, 40 Strength, 10 Mana\n";
+
+    std::cin >> c;
+	std::cout << std::endl;
+
+    if (c == 1) {
+        player.setHealth(100);
+        player.setStrength(30);
+        player.setMana(20);
+        inventory.pushBack(new weapons("Dagger", "Melee Weapon", 20, 80));
+        inventory.pushBack(new weapons("Sword", "Melee Weapon", 50, 80));
+        inventory.pushBack(new HealingPotion("Health Potion", "Consumable", 5, 2, 10));
+    }
+    else if (c == 2) {
+        player.setHealth(80);
+        player.setStrength(20);
+        player.setMana(40);
+        inventory.pushBack(new weapons("Dagger", "Melee Weapon", 20, 80));
+        inventory.pushBack(new weapons("Bow", "Ranged Weapon", 30, 90));
+        inventory.pushBack(new HealingPotion("Health Potion", "Consumable", 5, 2, 10));
+    }
+    else if (c == 3) {
+        player.setHealth(120);
+        player.setStrength(40);
+        player.setMana(10);
+        inventory.pushBack(new weapons("Gladiator Sword", "Melee Weapon", 60, 100));
+        inventory.pushBack(new weapons("Axe", "Heavy Battle Axe", 70, 90));
+        inventory.pushBack(new HealingPotion("Health Potion", "Consumable", 5, 2, 10));
+    }
+    else {
+        std::cout << "Invalid choice. Defaulting to Knight.\n";
+        player.setHealth(100);
+        player.setStrength(30);
+        player.setMana(20);
+        inventory.pushBack(new HealingPotion("Health Potion", "Consumable", 5, 2, 10));
+    }
+
+    std::cout << "Enter your character name: " << std::endl;
+    std::cin >> name;
+    player.setName(name);
+	std::cout << std::endl;
+    std::cout << "Welcome, " << name << "!\n";
+
+    // Display starting inventory
+    std::cout << "\nYour starting inventory:\n";
+    inventory.displayInvnetory();
+
+    pauseThenClear();
+}
+
 
 void displayMenu() {
     std::cout << "========== Game Menu ==========\n";
@@ -156,12 +230,7 @@ void handleMenuChoice(int choice) {
 
 int main() {
     srand(time(0));
-    inventory.pushBack(new weapons("Sword", "Melee Weapon", 50, 80));
-    inventory.pushBack(new weapons("Bow", "Ranged Weapon", 30, 90));
-    inventory.pushBack(new HealingPotion("Health Potion", "Consumable", 5, 2, 10));
-    inventory.pushBack(new weapons("Sword", "Starting Weapon", 50, 80));
-    inventory.pushBack(new weapons("Bow", "Ranged Starting Weapon", 30, 90));
-    inventory.pushBack(new HealingPotion("Health Potion", "Consumable", 5, 2, 10));
+    startGame();
     int choice;
     while (true) {
         displayMenu();

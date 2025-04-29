@@ -35,6 +35,11 @@ public:
 	{ 
 		// nothing here
 	}
+
+	// Alternative constructor to initialize the shop with a specific name and items
+	shop(const std::string& name, const std::vector<items*>& items, user& player, DLL& inventory)
+		: shopName(name), itemsForSale(items), ShopPlayer(player), ShopInventory(inventory) {
+	}
 	
 
 	void displayWelcomeMessage() {

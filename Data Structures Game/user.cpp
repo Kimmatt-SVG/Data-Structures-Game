@@ -4,6 +4,10 @@
 #include "inventory.h"
 #include "item.h"
 #include "globals.h"
+#include <windows.h>
+#include <mmsystem.h>
+#include <iostream>
+#pragma comment(lib, "Winmm.lib")
 
 user::user(int battleHealth, int str, int magicMana, std::string userName) {
 	health = battleHealth;
@@ -43,6 +47,9 @@ void user::setGold(int newGold) {
 void user::setName(std::string newName) {
 	name = newName;
 }
+void user::setMana(int newMana) {
+	mana = newMana;
+}
 
 //methods
 //genertes random attack value
@@ -53,118 +60,199 @@ int user::randomAtkValue() {
 	return distr(gen);
 }
 
-void user::battle(enemy& enemy) { //!FIXME - MIGHT NEED TO MOVE THE HEALTH CHECKS FOR BOTH PLAYER AND ENEMY	
-	//main battle loop while the players health is above 0
-	while (true) {
-		//players choice
-		int playerChoice;
-		//checks if you are dead
-		if (health <= 0) {
-			std::cout << std::endl;
-			std::cout << "You died!";
-			std::cout << std::endl;
-			std::cout << "Press 5 to continue...";
-			std::cin >> playerChoice;
-			if (playerChoice == 5) {
-				break;
-			}
-		}
-		//checks if you win
-		if (enemy.getHealth() <= 0) {
-			system("CLS");
-			std::cout << "You Won against: " << enemy.getName() << std::endl;
-			std::cout << "Press 5 to continue...";
-			std::cin >> playerChoice;
-			if (playerChoice == 5) {
-				break;
-			}
-		}
-		// Display player and enemy stats
-		// clears screen
-		system("CLS");
-		std::cout << std::endl;
-		std::cout << "========================\n";
-		std::cout << "| Enemy: " << enemy.getName() << std::endl;
-		std::cout << "| Enemy HP: " << enemy.getHealth() << std::endl;
-		std::cout << "========================\n";
-		std::cout << std::endl;
-		std::cout << "HP: " << health << std::endl;
-		std::cout << "MP: " << mana << std::endl;
-		std::cout << "1. Attack" << std::endl;
-		std::cout << "2. Use Mana Potion (does not work rn)" << std::endl;
-		std::cout << "3. Use Health Potion" << std::endl;
-		std::cout << "4. Run Away" << std::endl;
-		std::cout << "You choose: ";
-		std::cin >> playerChoice;
-		std::cout << std::endl;
-		//catches wrong imput
-		if (playerChoice < 1 || playerChoice > 4) {
-			std::cout << "That is not an option";
-			break;
-		}
-		if (playerChoice == 1) {
-			// need a temp place to store random ATK
-			int tempPlayerDamage = randomAtkValue();
-			//update enemy health
-			enemy.setHealth(enemy.getHealth() - tempPlayerDamage);
-			std::cout << "You have attacked! ";
-			std::this_thread::sleep_for(std::chrono::seconds(2)); // Pause for 2 seconds
-			std::cout << "You did " << tempPlayerDamage << " Damage!" << std::endl << std::endl;
-			std::this_thread::sleep_for(std::chrono::seconds(2)); // Pause for 2 seconds
-		}
+#include <windows.h>
+#include <mmsystem.h>
+#include <iostream>
+#pragma comment(lib, "Winmm.lib")
 
-		// Implementing potion usage
-		if (playerChoice == 3) {
-			// Search the inventory for a health potion
-			node* current = inventory.getFirst();
-			bool potionFound = false;
-			while (current != nullptr) {
-				//using dyanic cast
-				HealingPotion* potion = dynamic_cast<HealingPotion*>(current->data);
-				if (potion && potion->getItem() == "Health Potion") {
-					// checks if there is a potions
-					if (potion->getAmmount() > 0) {
-						//applies healing
-						health += potion->getHealingAmmount();
-						potion->use();
-						std::cout << "You used a Health Potion and healed " << potion->getHealingAmmount() << " HP! " << potion->getAmmount() << " Potions remaining \n\n";
-						// if potion is empty it removes it from inventory
-						if (potion->getAmmount() <= 0) {
-							inventory.removeNode(current);
-							std::cout << "You used up the last Health Potion.\n";
-						}
-						potionFound = true;
-					}
-					else {
-						// No uses left (should probably not happen if removed earlier)
-						std::cout << "This potion is empty.\n";
-					}
-					break;
-				}
-				current = current->nextNode;
-			}
-
-			if (!potionFound) {
-				std::cout << "You have no Health Potions left!\n";
-			}
-
-			std::this_thread::sleep_for(std::chrono::seconds(2));
-		}
-
-		if (playerChoice == 4) {
-			std::cout << "You flee away to fight another day...";
-			std::this_thread::sleep_for(std::chrono::seconds(2)); // Pause for 2 seconds
-			system("cls");
-			break;
-		}
-
-		//enemys turn
-		//calls the random attack function and applies it to the player
-		//temp place to store random value
-		int tempEnemyDamage = enemy.randomAtkValue();
-		health = health - tempEnemyDamage;
-		std::cout << "You have been attacked by " << enemy.getName() << std::endl;
-		std::cout << "Damage inflicted: " << tempEnemyDamage << std::endl;
-		std::this_thread::sleep_for(std::chrono::seconds(5)); // Pause for 5 seconds
-	}
+void playSoundEffect(const std::string& soundFile) {
+    std::wstring wideCommand = L"play " + std::wstring(soundFile.begin(), soundFile.end()) + L" from 0";
+    mciSendString(wideCommand.c_str(), NULL, 0, NULL);
 }
+
+
+void user::battle(enemy& enemy) {
+    // Play background music
+    PlaySound(TEXT("battle.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
+    // Pointer to the currently equipped weapon
+    weapons* equippedWeapon = nullptr;
+
+    // Initialize equipped weapon to the first weapon in the inventory
+    node* firstSlot = inventory.getFirst();
+    if (firstSlot) {
+        equippedWeapon = dynamic_cast<weapons*>(firstSlot->data);
+    }
+
+    // Main battle loop
+    while (true) {
+        // Player's choice
+        int playerChoice;
+
+        // Check if the player is dead
+        if (health <= 0) {
+            PlaySound(NULL, NULL, SND_PURGE); // Stop background music
+            std::cout << std::endl;
+            std::cout << "You died!" << std::endl;
+            std::cout << "Press 5 to continue...";
+            std::cin >> playerChoice;
+            if (playerChoice == 5) {
+                break;
+            }
+        }
+
+        // Check if the enemy is dead
+        if (enemy.getHealth() <= 0) {
+            PlaySound(NULL, NULL, SND_PURGE); // Stop background music
+            system("CLS");
+            std::cout << "You Won against: " << enemy.getName() << std::endl;
+            std::cout << "Press 5 to continue...";
+            std::cin >> playerChoice;
+            if (playerChoice == 5) {
+                break;
+            }
+        }
+
+        // Display player and enemy stats
+        system("CLS");
+        std::cout << std::endl;
+        std::cout << "========================\n";
+        std::cout << "| Enemy: " << enemy.getName() << std::endl;
+        std::cout << "| Enemy HP: " << enemy.getHealth() << std::endl;
+        std::cout << "========================\n";
+        std::cout << std::endl;
+        std::cout << "HP: " << health << std::endl;
+        std::cout << "MP: " << mana << std::endl;
+        std::cout << "Equipped Weapon: " << (equippedWeapon ? equippedWeapon->getItem() : "None") << std::endl;
+        std::cout << "1. Attack" << std::endl;
+        std::cout << "2. Use Mana Potion (does not work rn)" << std::endl;
+        std::cout << "3. Use Health Potion" << std::endl;
+        std::cout << "4. Switch Weapon" << std::endl;
+        std::cout << "5. Run Away" << std::endl;
+        std::cout << "You choose: ";
+        std::cin >> playerChoice;
+        std::cout << std::endl;
+
+        // Handle invalid input
+        if (playerChoice < 1 || playerChoice > 5) {
+            std::cout << "That is not an option.";
+            break;
+        }
+
+        if (playerChoice == 1) {
+            // Attack with the equipped weapon or fallback to strength-based attack
+            playSoundEffect("attack.wav"); // Play attack sound effect
+            int tempPlayerDamage = equippedWeapon ? equippedWeapon->getDamage() : randomAtkValue();
+            enemy.setHealth(enemy.getHealth() - tempPlayerDamage);
+            std::cout << "You attacked with " << (equippedWeapon ? equippedWeapon->getItem() : "your fists") << "!";
+            std::this_thread::sleep_for(std::chrono::seconds(2));
+            std::cout << " You did " << tempPlayerDamage << " damage!" << std::endl << std::endl;
+            std::this_thread::sleep_for(std::chrono::seconds(2));
+        }
+
+        if (playerChoice == 3) {
+            // Use health potion logic
+            playSoundEffect("health_potion.wav"); // Play health potion sound effect
+            node* current = inventory.getFirst();
+            bool potionFound = false;
+            while (current != nullptr) {
+                HealingPotion* potion = dynamic_cast<HealingPotion*>(current->data);
+                if (potion && potion->getItem() == "Health Potion") {
+                    if (potion->getAmmount() > 0) {
+                        health += potion->getHealingAmmount();
+                        potion->use();
+                        std::cout << "You used a Health Potion and healed " << potion->getHealingAmmount() << " HP! " << potion->getAmmount() << " Potions remaining.\n\n";
+                        if (potion->getAmmount() <= 0) {
+                            inventory.removeNode(current);
+                            std::cout << "You used up the last Health Potion.\n";
+                        }
+                        potionFound = true;
+                    }
+                    else {
+                        std::cout << "This potion is empty.\n";
+                    }
+                    break;
+                }
+                current = current->nextNode;
+            }
+
+            if (!potionFound) {
+                std::cout << "You have no Health Potions left!\n";
+            }
+
+            std::this_thread::sleep_for(std::chrono::seconds(2));
+        }
+
+        if (playerChoice == 4) {
+            // Switch weapon logic
+            playSoundEffect("switch_weapon.wav"); // Play switch weapon sound effect
+            node* firstSlot = inventory.getFirst();
+            node* secondSlot = firstSlot ? firstSlot->nextNode : nullptr;
+
+            std::cout << "Choose a weapon to equip:\n";
+            if (firstSlot) {
+                weapons* weapon1 = dynamic_cast<weapons*>(firstSlot->data);
+                if (weapon1) {
+                    std::cout << "1. " << weapon1->getItem() << std::endl;
+                }
+            }
+            if (secondSlot) {
+                weapons* weapon2 = dynamic_cast<weapons*>(secondSlot->data);
+                if (weapon2) {
+                    std::cout << "2. " << weapon2->getItem() << std::endl;
+                }
+            }
+            std::cout << "3. Cancel\n";
+            int weaponChoice;
+            std::cin >> weaponChoice;
+
+            if (weaponChoice == 1 && firstSlot) {
+                weapons* weapon1 = dynamic_cast<weapons*>(firstSlot->data);
+                if (weapon1) {
+                    equippedWeapon = weapon1;
+                    std::cout << "You equipped " << equippedWeapon->getItem() << "!\n";
+                }
+                else {
+                    std::cout << "The selected item is not a weapon.\n";
+                }
+            }
+            else if (weaponChoice == 2 && secondSlot) {
+                weapons* weapon2 = dynamic_cast<weapons*>(secondSlot->data);
+                if (weapon2) {
+                    equippedWeapon = weapon2;
+                    std::cout << "You equipped " << equippedWeapon->getItem() << "!\n";
+                }
+                else {
+                    std::cout << "The selected item is not a weapon.\n";
+                }
+            }
+            else {
+                std::cout << "No weapon equipped.\n";
+            }
+        }
+
+        if (playerChoice == 5) {
+            PlaySound(NULL, NULL, SND_PURGE); // Stop background music
+            playSoundEffect("run_away.wav"); // Play running away sound effect
+            std::cout << "You flee away to fight another day...";
+            std::this_thread::sleep_for(std::chrono::seconds(2));
+            system("cls");
+            break;
+        }
+
+        // Enemy's turn
+        int tempEnemyDamage = enemy.randomAtkValue();
+        playSoundEffect("enemy_attack.wav"); // Play enemy attack sound effect
+        health -= tempEnemyDamage;
+        std::cout << "You have been attacked by " << enemy.getName() << std::endl;
+        std::cout << "Damage inflicted: " << tempEnemyDamage << std::endl;
+        std::this_thread::sleep_for(std::chrono::seconds(5));
+    }
+
+    // Stop the background music after the battle ends
+    PlaySound(NULL, NULL, SND_PURGE);
+}
+
+
+
+
