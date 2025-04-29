@@ -1,4 +1,5 @@
 #include "inventory.h"
+#include "globals.h"
 
 node::node(items* x) : data(x), nextNode(nullptr), prevNode(nullptr) {}
 
@@ -158,77 +159,147 @@ items* node::getItem() {
         std::cout << std::endl;
     }
 
-    void DLL::manaageInventory() {
-        int couter = 1;
-        system("cls");
-
-        int response;
-        int response2;
-
-        node* temp = head;
-        std::cout << "This is your inventory: " << std::endl;
-        while (temp) {
-            std::string itemName = temp->data->getItem();
-
-            HealingPotion* potion = dynamic_cast<HealingPotion*>(temp->data);
-            if (potion) {
-                std::cout << couter << ". " << itemName << " (x" << potion->getAmmount() << ")" << std::endl;
-            }
-            else {
-                std::cout << couter << ". " << itemName << std::endl;
-            }
-
-            temp = temp->nextNode;
-            couter++;
-        }
-
-        std::cout << "Press 1 to manage inventory or 0 to quit" << std::endl;
-        std::cin >> response;
-
-        if (response != 1 && response != 0) {
-            std::cout << "This is an invalid choice";
-            manaageInventory();
-        }
-        else if (response == 1) {
-            std::cout << "Enter the item number you would like to remove (press 0 to exit): " << std::endl;
-            std::cin >> response2;
-            system("cls");
-
-            if (response2 == 0) return;
-
-            if (response2 < 1 || response2 >= couter) {
-                manaageInventory();
-                return;
-            }
-
-            node* target = head;
-            int count = 1;
-            while (target != nullptr && count < response2) {
-                target = target->nextNode;
-                count++;
-            }
-
-            if (target == nullptr) return;
-
-            if (target == head) {
-                popFront();
-            }
-            else if (target == getLast()) {
-                popBack();
-            }
-            else {
-                target->prevNode->nextNode = target->nextNode;
-                target->nextNode->prevNode = target->prevNode;
-                delete target;
-            }
-
-            std::cout << "Item removed successfully." << std::endl;
-        }
-        else if (response == 0) {
-            system("cls");
+    void DLL::swapItems() {
+        if (!head || !head->nextNode) {
+            std::cout << "Not enough items in the inventory to swap." << std::endl;
             return;
         }
+
+        // Display the inventory
+        displayInvnetory();
+
+        int firstItemIndex, secondItemIndex;
+        std::cout << "Enter the number of the first item to swap: ";
+        std::cin >> firstItemIndex;
+        std::cout << "Enter the number of the second item to swap: ";
+        std::cin >> secondItemIndex;
+
+        // Validate input
+        if (firstItemIndex < 1 || secondItemIndex < 1 || firstItemIndex == secondItemIndex) {
+            std::cout << "Invalid input. Please try again." << std::endl;
+            return;
+        }
+
+        // Find the nodes corresponding to the selected indices
+        node* firstNode = head;
+        node* secondNode = head;
+        int currentIndex = 1;
+
+        while (firstNode && currentIndex < firstItemIndex) {
+            firstNode = firstNode->nextNode;
+            currentIndex++;
+        }
+
+        currentIndex = 1;
+        while (secondNode && currentIndex < secondItemIndex) {
+            secondNode = secondNode->nextNode;
+            currentIndex++;
+        }
+
+        // Ensure both nodes exist
+        if (!firstNode || !secondNode) {
+            std::cout << "One or both items not found. Please try again." << std::endl;
+            return;
+        }
+
+        // Check if the first two slots are being swapped with non-weapon items
+        if ((firstItemIndex <= 2 || secondItemIndex <= 2)) {
+            if (firstNode->data->getType() != "Weapon" || secondNode->data->getType() != "Weapon") {
+                std::cout << "Error: Only weapon-type items can be swapped into the first two slots." << std::endl;
+                return;
+            }
+        }
+
+        // Swap the data pointers
+        items* temp = firstNode->data;
+        firstNode->data = secondNode->data;
+        secondNode->data = temp;
+
+        // Display the updated inventory
+        std::cout << "Items swapped successfully!" << std::endl;
+        displayInvnetory();
+        pauseThenClear();
     }
+
+
+
+    void DLL::manaageInventory() {
+        while (true) { // Loop until the user chooses to quit
+            int counter = 1;
+            system("cls");
+
+            int response;
+
+            node* temp = head;
+            std::cout << "This is your inventory: " << std::endl;
+            while (temp) {
+                std::string itemName = temp->data->getItem();
+
+                HealingPotion* potion = dynamic_cast<HealingPotion*>(temp->data);
+                if (potion) {
+                    std::cout << counter << ". " << itemName << " (x" << potion->getAmmount() << ")" << std::endl;
+                }
+                else {
+                    std::cout << counter << ". " << itemName << std::endl;
+                }
+
+                temp = temp->nextNode;
+                counter++;
+            }
+
+            std::cout << "Press 1 to remove an item, 2 to swap items, or 0 to quit: ";
+            std::cin >> response;
+
+            if (response == 1) {
+                int itemIndex;
+                std::cout << "Enter the item number you would like to remove (press 0 to exit): ";
+                std::cin >> itemIndex;
+
+                if (itemIndex == 0) {
+                    continue; // Return to the main menu
+                }
+
+                if (itemIndex < 1 || itemIndex >= counter) {
+                    std::cout << "Invalid item number. Please try again." << std::endl;
+                    system("pause");
+                    continue;
+                }
+
+                // Find the node to remove
+                node* target = head;
+                int currentIndex = 1;
+                while (target && currentIndex < itemIndex) {
+                    target = target->nextNode;
+                    currentIndex++;
+                }
+
+                if (target) {
+                    removeNode(target);
+                    std::cout << "Item removed successfully!" << std::endl;
+                }
+                else {
+                    std::cout << "Item not found. Please try again." << std::endl;
+                }
+
+                system("pause");
+            }
+            else if (response == 2) {
+                system("cls");
+                swapItems();
+            }
+            else if (response == 0) {
+                system("cls");
+                return; // Exit the loop and quit
+            }
+            else {
+                std::cout << "Invalid choice. Please try again." << std::endl;
+                system("pause");
+            }
+        }
+    }
+
+
+
 
 
     void DLL::removeNode(node* target) {

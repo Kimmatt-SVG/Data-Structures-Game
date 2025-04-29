@@ -25,6 +25,7 @@ public:
 	void setStrength(int newStrength);
 	void setGold(int newGold);
 	void setName(std::string newName);
+	void setMana(int newMana);
 	//methods
 	int randomAtkValue();
 	void battle(enemy& enemy);
