@@ -60,15 +60,6 @@ int user::randomAtkValue() {
 	return distr(gen);
 }
 
-#include <windows.h>
-#include <mmsystem.h>
-#include <iostream>
-#pragma comment(lib, "Winmm.lib")
-
-void playSoundEffect(const std::string& soundFile) {
-    std::wstring wideCommand = L"play " + std::wstring(soundFile.begin(), soundFile.end()) + L" from 0";
-    mciSendString(wideCommand.c_str(), NULL, 0, NULL);
-}
 
 
 void user::battle(enemy& enemy) {

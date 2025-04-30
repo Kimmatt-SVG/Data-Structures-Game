@@ -151,7 +151,12 @@
     <Media Include="Attack.wav" />
     <Media Include="Battle.wav" />
     <Media Include="enemy_attack.wav" />
+    <Media Include="explore.wav" />
     <Media Include="health_potion.wav" />
+    <Media Include="move_east.wav" />
+    <Media Include="move_north.wav" />
+    <Media Include="move_south.wav" />
+    <Media Include="move_west.wav" />
     <Media Include="run_away.mp3" />
     <Media Include="switch_weapon.wav" />
   </ItemGroup>
