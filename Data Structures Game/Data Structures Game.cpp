@@ -10,6 +10,7 @@
 #include "globals.h"
 #include "map.h"
 #include "shop.cpp"
+#include "limits"
 
 //CREATE GAME OBJECTS HERE
 
@@ -105,18 +106,13 @@ void displayMenu() {
 }
 
 void explore() {
+    // Play background music for exploration
+    PlaySound(TEXT("explore.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
     GameMap gameMap(5, 5);
-  /*  gameMap.addNode(6, "Ancient Forest - The trees here are unnaturally tall.");
-    gameMap.addNode(14, "Dangerous Swamp - Thick fog obscures your vision.");*/
-
-   // gameMap.addNode(18, "Swamp Depths - A foul stench fills the air.");
-
     gameMap.setImpassable(1);
-    //gameMap.setImpassable(13);
-    //gameMap.addNode(8, "Village Square - A friendly merchant waves at you from his stall.");
 
     while (true) {
-        system("cls");
         system("cls");
         gameMap.displayCurrentLocation();
         gameMap.displayMap();
@@ -135,15 +131,19 @@ void explore() {
         input = toupper(input);
 
         if (std::cin.fail()) {
-            std::cin.clear(); 
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
+            std::cin.clear();
             continue;
         }
+
+        // Handle movement and play sound effects
         switch (input) {
         case 'W':
             if (!gameMap.move('W')) {
                 std::cout << "\nYou cannot go that way!\n";
                 system("pause");
+            }
+            else {
+                playSoundEffect("move_east.wav");
             }
             break;
         case 'S':
@@ -151,11 +151,17 @@ void explore() {
                 std::cout << "\nYou cannot go that way!\n";
                 system("pause");
             }
+            else {
+                playSoundEffect("move_east.wav");
+            }
             break;
         case 'A':
             if (!gameMap.move('A')) {
                 std::cout << "\nYou cannot go that way!\n";
                 system("pause");
+            }
+            else {
+                playSoundEffect("move_east.wav");
             }
             break;
         case 'D':
@@ -163,8 +169,13 @@ void explore() {
                 std::cout << "\nYou cannot go that way!\n";
                 system("pause");
             }
+            else {
+                playSoundEffect("move_east.wav");
+            }
             break;
         case 'M':
+            // Stop exploration music when returning to the menu
+            PlaySound(NULL, NULL, SND_PURGE);
             return;
         case 'I':
             inventory.manaageInventory();
@@ -174,6 +185,7 @@ void explore() {
             system("pause");
             break;
         }
+
         MapNode* current = gameMap.getCurrentLocation();
         if (!current) {
             std::cerr << "Error: currentLocation is null!\n";
@@ -187,19 +199,25 @@ void explore() {
         else if (current->id == 13) {
             if (rand() % 2 == 0) {
                 std::cout << "\nA swamp creature attacks you!\n";
+                PlaySound(NULL, NULL, SND_PURGE); // Stop exploration music
                 player.battle(goba);
+                PlaySound(TEXT("explore.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP); // Resume exploration music
                 system("pause");
             }
         }
         else if (current->id == 0) {
             if (rand() % 3 == 0) {
                 std::cout << "\nA swamp creature attacks you!\n";
+                PlaySound(NULL, NULL, SND_PURGE); // Stop exploration music
                 player.battle(brown);
+                PlaySound(TEXT("explore.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP); // Resume exploration music
                 system("pause");
             }
         }
     }
 }
+
+
 
 void returnToOverworld() {
     system("cls");
