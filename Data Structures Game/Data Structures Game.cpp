@@ -16,6 +16,7 @@
 DLL inventory;
 user player(100, 30, 20, "Test Dummy");
 goblin goba(100, 11, "goba1");
+goblin goby(500, 31, "Jack Grieshop");
 goblin brown(10000000000, 1111, "Dr. Tyler Brown");
 shop TestShop(player, inventory);
 shop secretShop(player, inventory);
@@ -195,7 +196,7 @@ void explore() {
         }
         if (current->id == 8) {
             roadsideBeggar merchant;
-            merchant.printDialogue(1);
+            merchant.printDialogue(0);
             system("pause");
         }
         else if (current->id == 13) {
@@ -209,6 +210,13 @@ void explore() {
             if (rand() % 3 == 0) {
                 std::cout << "\nA swamp creature attacks you!\n";
                 player.battle(brown);
+                system("pause");
+            }
+        }
+        else if (current->id == 23) {
+            if (rand() % 3 == 0) {
+                std::cout << "\nA swamp creature attacks you!\n";
+                player.battle(goby);
                 system("pause");
             }
         }
