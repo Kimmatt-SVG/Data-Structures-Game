@@ -19,6 +19,12 @@ user player(100, 30, 20, "Test Dummy");
 goblin goba(100, 11, "goba1");
 goblin brown(10000000000, 1111, "Dr. Tyler Brown");
 shop TestShop(player, inventory);
+shop secretShop(player, inventory);
+
+
+
+
+
 
 // Define items for the Mythic Shop
 std::vector<items*> mythicItems = {
@@ -123,6 +129,8 @@ void explore() {
         std::cout << "D - Move East\n";
         std::cout << "M - Open Menu\n";
         std::cout << "I - Open Inventory\n";
+        std::cout << "L - Start Shopping\n";
+        std::cout << "O - Secret?!?!?\n";
         std::cout << "==========================\n";
         std::cout << "Choose an action: ";
 
@@ -172,6 +180,12 @@ void explore() {
             else {
                 playSoundEffect("move_east.wav");
             }
+            break;
+        case 'L':
+            TestShop.playShop();
+            break;
+        case 'O':
+            secretShop.playShop();
             break;
         case 'M':
             // Stop exploration music when returning to the menu
@@ -266,6 +280,7 @@ void handleMenuChoice(int choice) {
 }
 
 int main() {
+    secretShop.addItem(new weapons("Gus's Wet Sock", "Forged in darkness (hell)", 10, 10000000000000000));
     srand(time(0));
     startGame();
     int choice;
