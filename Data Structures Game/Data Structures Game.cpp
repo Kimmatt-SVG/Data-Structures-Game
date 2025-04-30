@@ -16,6 +16,7 @@
 DLL inventory;
 user player(100, 30, 20, "Test Dummy");
 goblin goba(100, 11, "goba1");
+goblin brown(10000000000, 1111, "Dr. Tyler Brown");
 shop TestShop(player, inventory);
 
 // Define items for the Mythic Shop
@@ -105,11 +106,14 @@ void displayMenu() {
 
 void explore() {
     GameMap gameMap(5, 5);
-    gameMap.addNode(6, "Ancient Forest - The trees here are unnaturally tall.");
-    gameMap.addNode(18, "Dangerous Swamp - Thick fog obscures your vision.");
-    gameMap.setImpassable(12);
-    gameMap.setImpassable(13);
-    gameMap.addNode(8, "Village Square - A friendly merchant waves at you from his stall.");
+  /*  gameMap.addNode(6, "Ancient Forest - The trees here are unnaturally tall.");
+    gameMap.addNode(14, "Dangerous Swamp - Thick fog obscures your vision.");*/
+
+   // gameMap.addNode(18, "Swamp Depths - A foul stench fills the air.");
+
+    gameMap.setImpassable(1);
+    //gameMap.setImpassable(13);
+    //gameMap.addNode(8, "Village Square - A friendly merchant waves at you from his stall.");
 
     while (true) {
         system("cls");
@@ -130,6 +134,11 @@ void explore() {
         std::cin >> input;
         input = toupper(input);
 
+        if (std::cin.fail()) {
+            std::cin.clear(); 
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
+            continue;
+        }
         switch (input) {
         case 'W':
             if (!gameMap.move('W')) {
@@ -165,17 +174,27 @@ void explore() {
             system("pause");
             break;
         }
-
         MapNode* current = gameMap.getCurrentLocation();
+        if (!current) {
+            std::cerr << "Error: currentLocation is null!\n";
+            continue;
+        }
         if (current->id == 8) {
             roadsideBeggar merchant;
             merchant.printDialogue(1);
             system("pause");
         }
-        else if (current->id == 18) {
-            if (rand() % 4 == 0) {
+        else if (current->id == 13) {
+            if (rand() % 2 == 0) {
                 std::cout << "\nA swamp creature attacks you!\n";
                 player.battle(goba);
+                system("pause");
+            }
+        }
+        else if (current->id == 0) {
+            if (rand() % 3 == 0) {
+                std::cout << "\nA swamp creature attacks you!\n";
+                player.battle(brown);
                 system("pause");
             }
         }
