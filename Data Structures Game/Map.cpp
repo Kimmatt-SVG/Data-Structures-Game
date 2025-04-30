@@ -42,6 +42,8 @@ GameMap::GameMap(int width, int height) : width(width), height(height), currentL
 
     setImpassable((height / 3) * width + (width / 3)); // Top-left area
     setImpassable((2 * height / 3) * width + (2 * width / 3)); // Bottom-right area
+
+
 }
 
 GameMap::~GameMap() {
@@ -56,6 +58,7 @@ void GameMap::addNode(int id, const std::string& description, bool passable) {
 }
 
 void GameMap::connectNodes(int fromId, int toId, char direction) {
+
     if (nodes.find(fromId) == nodes.end() || nodes.find(toId) == nodes.end()) {
         throw std::runtime_error("Attempted to connect non-existent nodes");
     }
@@ -85,6 +88,8 @@ void GameMap::connectNodes(int fromId, int toId, char direction) {
     }
 }
 void GameMap::getPlayerPosition(int& x, int& y) const {
+
+   //td::cout << "Debug: Node 18 exists? " << (nodes.count(18) ? "Yes" : "No") << std::endl;
     if (!currentLocation) {
         x = y = -1;
         return;
@@ -130,40 +135,38 @@ void GameMap::setImpassable(int id) {
 }
 
 bool GameMap::move(char direction) {
-    if (!currentLocation) return false;
-
-    MapNode* target = nullptr;
-
-    switch (tolower(direction)) {
-    case 'w':
-        target = currentLocation->up;
-        break;
-    case 's':
-        target = currentLocation->down;
-        break;
-    case 'a':
-        target = currentLocation->left;
-        break;
-    case 'd':
-        target = currentLocation->right;
-        break;
-    default:
+    if (!currentLocation) {
+        std::cerr << "Error: Current location is null!\n";
         return false;
     }
 
-    if (target && target->isPassable) {
-        currentLocation = target;
-        return true;
+    MapNode* target = nullptr;
+    switch (tolower(direction)) {
+    case 'w': target = currentLocation->up; break;
+    case 's': target = currentLocation->down; break;
+    case 'a': target = currentLocation->left; break;
+    case 'd': target = currentLocation->right; break;
     }
 
-    return false;
-}
+    if (!target) {
+        std::cerr << "Error: Cannot move " << direction << " (target is null)\n";
+        return false;
+    }
 
+    if (!target->isPassable) {
+        std::cerr << "Error: Target node " << target->id << " is impassable!\n";
+        return false;
+    }
+
+    currentLocation = target;
+    return true;
+}
 MapNode* GameMap::getCurrentLocation() const {
     return currentLocation;
 }
 
 void GameMap::displayCurrentLocation() const {
+
     if (currentLocation) {
         std::cout << currentLocation->description << "\n";
 

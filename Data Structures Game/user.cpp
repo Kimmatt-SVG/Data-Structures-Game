@@ -83,14 +83,18 @@ void user::battle(enemy& enemy) {
     if (firstSlot) {
         equippedWeapon = dynamic_cast<weapons*>(firstSlot->data);
     }
-
+    int resetE = enemy.getHealth();
+    int resetU = health;
     // Main battle loop
     while (true) {
         // Player's choice
         int playerChoice;
+        
 
         // Check if the player is dead
         if (health <= 0) {
+            enemy.setHealth(resetE);
+            health = resetU;
             PlaySound(NULL, NULL, SND_PURGE); // Stop background music
             std::cout << std::endl;
             std::cout << "You died!" << std::endl;
@@ -103,6 +107,8 @@ void user::battle(enemy& enemy) {
 
         // Check if the enemy is dead
         if (enemy.getHealth() <= 0) {
+            enemy.setHealth(resetE);
+            health = resetU;
             PlaySound(NULL, NULL, SND_PURGE); // Stop background music
             system("CLS");
             std::cout << "You Won against: " << enemy.getName() << std::endl;
@@ -125,7 +131,7 @@ void user::battle(enemy& enemy) {
         std::cout << "MP: " << mana << std::endl;
         std::cout << "Equipped Weapon: " << (equippedWeapon ? equippedWeapon->getItem() : "None") << std::endl;
         std::cout << "1. Attack" << std::endl;
-        std::cout << "2. Use Mana Potion (does not work rn)" << std::endl;
+        std::cout << "2. Do absolutetly nothing" << std::endl;
         std::cout << "3. Use Health Potion" << std::endl;
         std::cout << "4. Switch Weapon" << std::endl;
         std::cout << "5. Run Away" << std::endl;
@@ -149,7 +155,9 @@ void user::battle(enemy& enemy) {
             std::cout << " You did " << tempPlayerDamage << " damage!" << std::endl << std::endl;
             std::this_thread::sleep_for(std::chrono::seconds(2));
         }
-
+        if (playerChoice == 2) {
+            std::cout << "You are picking your nose for boggies" << std::endl; 
+        }
         if (playerChoice == 3) {
             // Use health potion logic
             playSoundEffect("health_potion.wav"); // Play health potion sound effect
@@ -239,14 +247,20 @@ void user::battle(enemy& enemy) {
             system("cls");
             break;
         }
-
-        // Enemy's turn
-        int tempEnemyDamage = enemy.randomAtkValue();
-        playSoundEffect("enemy_attack.wav"); // Play enemy attack sound effect
-        health -= tempEnemyDamage;
-        std::cout << "You have been attacked by " << enemy.getName() << std::endl;
-        std::cout << "Damage inflicted: " << tempEnemyDamage << std::endl;
-        std::this_thread::sleep_for(std::chrono::seconds(5));
+        if (enemy.getHealth() > 0) {
+            // Enemy's turn
+            int tempEnemyDamage = enemy.randomAtkValue();
+            playSoundEffect("enemy_attack.wav"); // Play enemy attack sound effect
+            health -= tempEnemyDamage;
+            std::cout << "You have been attacked by " << enemy.getName() << std::endl;
+            std::cout << "Damage inflicted: " << tempEnemyDamage << std::endl;
+            std::this_thread::sleep_for(std::chrono::seconds(5));
+        }
+        else {
+            std::cout << enemy.getName() << " tried to attack but has unfortunately died" << std::endl;
+            std::this_thread::sleep_for(std::chrono::seconds(5));
+           
+        }
     }
 
     // Stop the background music after the battle ends
