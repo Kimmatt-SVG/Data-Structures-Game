@@ -88,7 +88,7 @@ void user::battle(enemy& enemy) {
             health = resetU;
             PlaySound(NULL, NULL, SND_PURGE); // Stop background music
             std::cout << std::endl;
-            std::cout << "You died!" << std::endl;
+            std::cout << "You died! Rip bozo" << std::endl;
             std::cout << "Press 5 to continue...";
             std::cin >> playerChoice;
             if (playerChoice == 5) {

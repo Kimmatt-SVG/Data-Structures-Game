@@ -25,25 +25,25 @@ class roadsideBeggar : public talkingNPC {
 public:
     roadsideBeggar() : talkingNPC("Roadside Beggar", 4) {
         dialogueTree[0] = dialogueNode(
-            "Spare some coins for a poor beggar?",
+            "Spare some coins for a poor lad?",
             "0. Give 10 gold\n1. Ignore him\n2. Threaten him",
             { 1, 2, 3 }
         );
 
         dialogueTree[1] = dialogueNode(
-            "Thank you, kind soul! May the gods bless you!",
+            "Thank you, kind soul! May God bless you!",
             "0. Walk away",
             { -1 } // End of dialogue
         );
 
         dialogueTree[2] = dialogueNode(
-            "Fine, be that way...",
-            "0. Walk away",
+            "WAAAAAAHHHH",
+            "0. Walk away from the deranged lad",
             { -1 } // End of dialogue
         );
 
         dialogueTree[3] = dialogueNode(
-            "You dare threaten me? I'll call the guards!",
+            "You dare threaten me? IMMA CRY!",
             "0. Apologize\n1. Continue threatening",
             { 1, 2 }
         );
