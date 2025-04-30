@@ -41,7 +41,9 @@ public:
 		: shopName(name), itemsForSale(items), ShopPlayer(player), ShopInventory(inventory) {
 	}
 	
-
+	void addItem(items* newItem) {
+		itemsForSale.push_back(newItem);
+	}
 	void displayWelcomeMessage() {
 		std::cout << "Welcome to " << shopName << "!" << std::endl;
 		std::cout << "Here are the items for sale:" << std::endl << std::endl;

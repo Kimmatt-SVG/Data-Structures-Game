@@ -192,46 +192,33 @@ void user::battle(enemy& enemy) {
         }
 
         if (playerChoice == 4) {
-            // Switch weapon logic
-            playSoundEffect("switch_weapon.wav"); // Play switch weapon sound effect
-            node* firstSlot = inventory.getFirst();
-            node* secondSlot = firstSlot ? firstSlot->nextNode : nullptr;
+            playSoundEffect("switch_weapon.wav"); // Play sound effect
+
+            std::vector<node*> weaponSlots;
+            node* current = inventory.getFirst();
+            int slotCount = 0;
 
             std::cout << "Choose a weapon to equip:\n";
-            if (firstSlot) {
-                weapons* weapon1 = dynamic_cast<weapons*>(firstSlot->data);
-                if (weapon1) {
-                    std::cout << "1. " << weapon1->getItem() << std::endl;
+
+            while (current && weaponSlots.size() < 3) {
+                weapons* weapon = dynamic_cast<weapons*>(current->data);
+                if (weapon) {
+                    weaponSlots.push_back(current);
+                    std::cout << weaponSlots.size() << ". " << weapon->getItem() << "\n";
                 }
+                current = current->nextNode;
+                slotCount++;
             }
-            if (secondSlot) {
-                weapons* weapon2 = dynamic_cast<weapons*>(secondSlot->data);
-                if (weapon2) {
-                    std::cout << "2. " << weapon2->getItem() << std::endl;
-                }
-            }
-            std::cout << "3. Cancel\n";
+
+            std::cout << weaponSlots.size() + 1 << ". Cancel\n";
             int weaponChoice;
             std::cin >> weaponChoice;
 
-            if (weaponChoice == 1 && firstSlot) {
-                weapons* weapon1 = dynamic_cast<weapons*>(firstSlot->data);
-                if (weapon1) {
-                    equippedWeapon = weapon1;
+            if (weaponChoice >= 1 && weaponChoice <= weaponSlots.size()) {
+                weapons* selectedWeapon = dynamic_cast<weapons*>(weaponSlots[weaponChoice - 1]->data);
+                if (selectedWeapon) {
+                    equippedWeapon = selectedWeapon;
                     std::cout << "You equipped " << equippedWeapon->getItem() << "!\n";
-                }
-                else {
-                    std::cout << "The selected item is not a weapon.\n";
-                }
-            }
-            else if (weaponChoice == 2 && secondSlot) {
-                weapons* weapon2 = dynamic_cast<weapons*>(secondSlot->data);
-                if (weapon2) {
-                    equippedWeapon = weapon2;
-                    std::cout << "You equipped " << equippedWeapon->getItem() << "!\n";
-                }
-                else {
-                    std::cout << "The selected item is not a weapon.\n";
                 }
             }
             else {
@@ -247,19 +234,21 @@ void user::battle(enemy& enemy) {
             system("cls");
             break;
         }
-        if (enemy.getHealth() > 0) {
-            // Enemy's turn
-            int tempEnemyDamage = enemy.randomAtkValue();
-            playSoundEffect("enemy_attack.wav"); // Play enemy attack sound effect
-            health -= tempEnemyDamage;
-            std::cout << "You have been attacked by " << enemy.getName() << std::endl;
-            std::cout << "Damage inflicted: " << tempEnemyDamage << std::endl;
-            std::this_thread::sleep_for(std::chrono::seconds(5));
-        }
-        else {
-            std::cout << enemy.getName() << " tried to attack but has unfortunately died" << std::endl;
-            std::this_thread::sleep_for(std::chrono::seconds(5));
-           
+        if (playerChoice != 4) {
+            if (enemy.getHealth() > 0) {
+                // Enemy's turn
+                int tempEnemyDamage = enemy.randomAtkValue();
+                playSoundEffect("enemy_attack.wav"); // Play enemy attack sound effect
+                health -= tempEnemyDamage;
+                std::cout << "You have been attacked by " << enemy.getName() << std::endl;
+                std::cout << "Damage inflicted: " << tempEnemyDamage << std::endl;
+                std::this_thread::sleep_for(std::chrono::seconds(5));
+            }
+            else {
+                std::cout << enemy.getName() << " tried to attack but has unfortunately died" << std::endl;
+                std::this_thread::sleep_for(std::chrono::seconds(5));
+
+            }
         }
     }
 
