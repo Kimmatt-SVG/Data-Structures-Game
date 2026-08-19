@@ -53,14 +53,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     item.style.display = 'block';
                     setTimeout(() => {
                         item.style.opacity = '1';
-                        item.style.transform = 'scale(1)';
-                    }, index * 50);
+                        item.style.transform = 'translateY(0)';
+                    }, index * 60);
                 } else {
                     item.style.opacity = '0';
-                    item.style.transform = 'scale(0.8)';
+                    item.style.transform = 'translateY(30px)';
                     setTimeout(() => {
                         item.style.display = 'none';
-                    }, 300);
+                    }, 400);
                 }
             });
         });
@@ -68,7 +68,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     galleryItems.forEach((item, index) => {
         item.addEventListener('click', () => {
-            currentImageIndex = index;
+            const visibleItems = Array.from(galleryItems).filter(i => {
+                const category = i.getAttribute('data-category');
+                return currentFilter === 'all' || category === currentFilter;
+            });
+            currentImageIndex = visibleItems.indexOf(item);
             openLightbox();
         });
     });
@@ -105,11 +109,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const titleSpan = document.createElement('span');
             titleSpan.textContent = title;
             titleSpan.style.position = 'absolute';
-            titleSpan.style.bottom = '30px';
+            titleSpan.style.bottom = '40px';
             titleSpan.style.left = '50%';
             titleSpan.style.transform = 'translateX(-50%)';
-            titleSpan.style.fontSize = '1.5rem';
-            titleSpan.style.fontWeight = '600';
+            titleSpan.style.fontSize = '1.8rem';
+            titleSpan.style.fontWeight = '300';
+            titleSpan.style.fontFamily = "'Playfair Display', serif";
+            titleSpan.style.letterSpacing = '0.02em';
             lightboxPlaceholder.appendChild(titleSpan);
         }
     }
@@ -167,18 +173,16 @@ document.addEventListener('DOMContentLoaded', () => {
     contactForm.addEventListener('submit', (e) => {
         e.preventDefault();
         
-        const formData = new FormData(contactForm);
         const name = e.target[0].value;
         const email = e.target[1].value;
-        const message = e.target[2].value;
         
-        alert(`Thank you for your message, ${name}! We'll get back to you at ${email} soon.`);
+        alert(`Thank you for reaching out, ${name}. We'll respond to ${email} shortly.`);
         contactForm.reset();
     });
 
     const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -100px 0px'
+        threshold: 0.15,
+        rootMargin: '0px 0px -80px 0px'
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -192,17 +196,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('.gallery-item, .about-content, .contact-content').forEach(el => {
         el.style.opacity = '0';
-        el.style.transform = 'translateY(30px)';
-        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        el.style.transform = 'translateY(40px)';
+        el.style.transition = 'opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
         observer.observe(el);
     });
 
     window.addEventListener('scroll', () => {
         const navbar = document.querySelector('.navbar');
-        if (window.scrollY > 50) {
-            navbar.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+        if (window.scrollY > 100) {
+            navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+            navbar.style.borderBottomColor = 'rgba(0, 0, 0, 0.08)';
         } else {
-            navbar.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+            navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+            navbar.style.borderBottomColor = 'var(--border-color)';
         }
     });
 
@@ -215,16 +221,16 @@ document.addEventListener('DOMContentLoaded', () => {
         stats.forEach(stat => {
             const target = parseInt(stat.textContent);
             let current = 0;
-            const increment = target / 50;
+            const increment = target / 60;
             const timer = setInterval(() => {
                 current += increment;
                 if (current >= target) {
-                    stat.textContent = target + '+';
+                    stat.textContent = target;
                     clearInterval(timer);
                 } else {
-                    stat.textContent = Math.floor(current) + '+';
+                    stat.textContent = Math.floor(current);
                 }
-            }, 30);
+            }, 25);
         });
         
         animated = true;
@@ -237,7 +243,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 animateStats();
             }
         });
-    }, { threshold: 0.5 });
+    }, { threshold: 0.4 });
 
-    aboutObserver.observe(aboutSection);
+    if (aboutSection) {
+        aboutObserver.observe(aboutSection);
+    }
+
+    galleryItems.forEach(item => {
+        item.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+    });
 });
